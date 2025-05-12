@@ -44,8 +44,8 @@
       "types": "./dist/field/index.d.ts"
     },
     "./modifier": {
-      "import": "./dist/json-twdc-field.es.js",
-      "require": "./dist/json-twdc-field.cjs.js",
+      "import": "./dist/json-twdc-modifier.es.js",
+      "require": "./dist/json-twdc-modifier.cjs.js",
       "types": "./dist/modifier/index.d.ts"
     }
   },
