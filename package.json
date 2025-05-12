@@ -1,0 +1,53 @@
+{
+  "name": "json-twdc",
+  "description": "A tool for creating JSON object serializers/deserializers for typescript interfaces and classes",
+  "keywords": [
+    "JSON",
+    "typescript",
+    "serialization",
+    "deserialization"
+  ],
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.3"
+  },
+  "bugs": {
+    "url": "https://github.com/Kirill-Lekhov/json-twdc/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kirill-Lekhov/json-twdc"
+  },
+  "main": "./dist/json-twdc-main.cjs.js",
+  "module": "./dist/json-twdc-main.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/json-twdc-main.es.js",
+      "require": "./dist/json-twdc-main.cjs.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./field": {
+      "import": "./dist/json-twdc-field.es.js",
+      "require": "./dist/json-twdc-field.cjs.js",
+      "types": "./dist/field/index.d.ts"
+    },
+    "./modifier": {
+      "import": "./dist/json-twdc-field.es.js",
+      "require": "./dist/json-twdc-field.cjs.js",
+      "types": "./dist/modifier/index.d.ts"
+    }
+  },
+  "files": ["dist"]
+}
