@@ -2,6 +2,30 @@ import type { BaseField } from "../field"
 import type ISerializer from "./ISerializer"
 
 
+/**
+ * Checks an object for compliance with a specific interface.
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ * 	username: string
+ * 	joinedAt: Date
+ * 	note?: string
+ * }
+ *
+ *
+ * class UserSerializer extends InterfaceSerializer<User> {
+ * 	fields = {
+ * 		username: Field({ type: "string" }),
+ * 		joinedAt: Field({ type: "date", alias: "joined_at" }),
+ * 		note: Field({ type: "string", optional: true })
+ * 	}
+ * }
+ *
+ * const serializer = new UserSerializer()
+ * const user = serializer.deserialize({ username: "JohnDoe", joined_at: "2025-01-01T12:30:30.000Z" })		// User
+ * ```
+ */
 export default abstract class InterfaceSerializer<T extends object> implements ISerializer<T> {
 	public abstract readonly fields: Record<keyof T, BaseField<T[keyof T]>>
 

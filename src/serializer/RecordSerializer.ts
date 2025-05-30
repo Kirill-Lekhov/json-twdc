@@ -5,6 +5,20 @@ import type { BaseField } from "../field"
 type AnyRecord = Record<string | number | symbol, any>
 
 
+/**
+ * Checks an object for compliance with a specific record type.
+ *
+ * @example
+ * ```typescript
+ * class AttendanceSerializer extends RecordSerializer<Record<string, number>> {
+ * 	public keysSerializer = new StringField({})
+ * 	public valuesSerializer = new NumberField({})
+ * }
+ *
+ * const serializer = new AttendanceSerialize()
+ * const attendance = serializer.deserialize({ "Doe": 1, "Eden": 2, "Ivanov": 0 })		// Record<string, number>
+ * ```
+ */
 export default abstract class RecordSerializer<T extends AnyRecord> extends BaseSerializer<T> {
 	public abstract readonly keysSerializer: BaseField<keyof T>
 	public abstract readonly valuesSerializer: BaseField<T[keyof T]>

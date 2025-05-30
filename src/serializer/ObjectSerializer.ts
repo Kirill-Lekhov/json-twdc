@@ -6,6 +6,41 @@ type InstanceKeys<T extends new (...args: any) => InstanceType<T>> = keyof Insta
 type InstanceBaseFields<T extends new (...args: any) => InstanceType<T>> = BaseField<InstanceType<T>[InstanceKeys<T>]>
 
 
+/**
+ * Allows to transform objects into objects of a certain class.
+ *
+ * Limitations:
+ * * Constructor must have the same arguments as the attributes specified in class body.
+ * * When creating a serializer, the order of the fields must match the order of the constructor arguments.
+ *
+ * @example
+ * ```typescript
+ * class User {
+ * 	public username: string
+ * 	public joinedAt: Date
+ * 	public note?: string
+ *
+ * 	constructor(username: string, joinedAt: Date, note?: string) {
+ * 		this.username = username
+ * 		this.joinedAt = joinedAt
+ * 		this.note = note
+ * 	}
+ * }
+ *
+ *
+ *  class UserSerializer extends ObjectSerializer<typeof User> {
+ * 	public builder = User
+ * 	public fields = {
+ * 		username: Field({ type: "string" }),
+ * 		joinedAt: Field({ type: "date", alias: "joined_at" }),
+ * 		note: Field({ type: "string", optional: true }),
+ * 	}
+ * }
+ *
+ * const serializer = new UserSerialize()
+ * const user = serializer.deserialize({ username: "JohnDoe", joined_at: "2025-01-01T12:30:30.000Z" })		// User
+ * ```
+ */
 export default abstract class ObjectSerializer<T extends new (...args: any) => InstanceType<T>> extends BaseSerializer<InstanceType<T>> {
 	public abstract readonly builder: T
 	public abstract readonly fields: Record<InstanceKeys<T>, InstanceBaseFields<T>>

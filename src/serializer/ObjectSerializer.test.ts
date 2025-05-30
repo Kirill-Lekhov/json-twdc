@@ -17,7 +17,7 @@ class User {
 }
 
 
-class TestSerializer extends ObjectSerializer<typeof User> {
+class UserSerializer extends ObjectSerializer<typeof User> {
 	public builder = User
 	public fields = {
 		username: Field({ type: "string" }),
@@ -29,7 +29,7 @@ class TestSerializer extends ObjectSerializer<typeof User> {
 
 describe("ObjectSerializer class", () => {
 	test("serialize method", () => {
-		const serializer = new TestSerializer()
+		const serializer = new UserSerializer()
 
 		expect(serializer.serialize(new User("JohnDoe", new Date("2007-01-01T00:00:00.000Z")))).toStrictEqual({
 			username: "JohnDoe",
@@ -43,7 +43,7 @@ describe("ObjectSerializer class", () => {
 	})
 
 	test("deserialize method", () => {
-		const serializer = new TestSerializer()
+		const serializer = new UserSerializer()
 
 		expect(serializer.deserialize({ username: "JohnDoe", joined_at: "2007-01-01T00:00:00.000Z" }))
 		.toStrictEqual(new User("JohnDoe", new Date("2007-01-01T00:00:00.000Z")))
