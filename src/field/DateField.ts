@@ -1,34 +1,37 @@
-import SerializerField from "./SerializerField"
+import BaseField from "./BaseField"
 
 
-export default function DateField(nullable: true): _DateField<true>
-export default function DateField(nullable?: false): _DateField<false>
-export default function DateField(nullable: boolean = false): _DateField<true> | _DateField<false> {
-	const field = new _DateField(nullable)
+const TimezoneSeparatorRE = new RegExp("[\+\-]")
 
-	if (nullable) {
-		return field as _DateField<true>
-	} else {
-		return field as _DateField<false>
+
+export default class DateField extends BaseField<Date> {
+	_serialize(value: Date): string {
+		return value.toISOString()
 	}
-}
 
-
-class _DateField<Nullable extends boolean> extends SerializerField<Date, Nullable> {
-	protected _deserialize(value: any): Date {
-		if (typeof value !== "string") {
-			throw new Error(`${this.constructor.name}: Unexpected type of value ${value}`)
+	_deserialize(raw: any): Date {
+		if (typeof raw !== "string") {
+			throw new Error(`${this.constructor.name}: Unexpected type of raw ${raw}`)
 		}
 
-		let [datetime, timezone] = value.split("+")
-		timezone = (timezone ?? "").split(":").slice(0, 2).join(":")
+		// Removing seconds from timezone
+		let cleanedDate: string
+		let [date, time] = raw.split("T")
 
-		if (timezone) {
-			value = `${datetime}+${timezone}`
+		if (time) {
+			let [naiveTime, timezone] = (time ?? "").split(TimezoneSeparatorRE)
+			timezone = (timezone ?? "").split(":").slice(0, 2).join(":")
+
+			if (timezone) {
+				const tzSeparator: "+" | "-" = time.search(/\+/) > 0 ? "+" : "-"
+				cleanedDate = `${date}T${naiveTime}${tzSeparator}${timezone}`
+			} else {
+				cleanedDate = `${date}T${naiveTime}`
+			}
 		} else {
-			value = datetime
+			cleanedDate = date
 		}
 
-		return new Date(value)
+		return new Date(cleanedDate)
 	}
 }

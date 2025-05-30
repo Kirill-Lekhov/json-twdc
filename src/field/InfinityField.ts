@@ -1,32 +1,22 @@
-import SerializerField from "./SerializerField"
+import BaseField from "./BaseField"
 
 
-/**
- * Similar with NumberField but represents raw null value as Infinity.
- *
- * @returns {_InfinityField} - InfinityField instance.
- */
-export default function InfinityField(): _InfinityField {
-	return new _InfinityField()
-}
-
-
-class _InfinityField extends SerializerField<number, false> {
-	constructor() {
-		super(false)
-	}
-
-	public deserialize(value: any): number {
-		return this._deserialize(value)
-	}
-
-	protected _deserialize(value: any): number {
-		if (typeof value === "number") {
-			return value
-		} else if (value === null) {
-			return Infinity
+export default class InfinityField extends BaseField<number> {
+	_serialize(value: number) {
+		if (value === Infinity) {
+			return null
 		}
 
-		throw new Error(`${this.constructor.name}: Unexpected type of value ${value}`)
+		return value
+	}
+
+	_deserialize(raw: any): number {
+		if (raw === null) {
+			return Infinity
+		} else if (typeof raw === "number") {
+			return raw
+		}
+
+		throw new Error(`${this.constructor.name}: Value must be of number type or null`)
 	}
 }

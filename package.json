@@ -13,13 +13,17 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "TZ=UTC vitest",
+    "coverage": "TZ=UTC vitest run --coverage"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
+    "@vitest/coverage-v8": "^3.1.4",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
-    "vite-plugin-dts": "^4.5.3"
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.1.4"
   },
   "bugs": {
     "url": "https://github.com/Kirill-Lekhov/json-twdc/issues"
@@ -34,19 +38,19 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/json-twdc-main.es.js",
-      "require": "./dist/json-twdc-main.cjs.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/json-twdc-main.cjs.js"
     },
     "./field": {
+      "types": "./dist/field/index.d.ts",
       "import": "./dist/json-twdc-field.es.js",
-      "require": "./dist/json-twdc-field.cjs.js",
-      "types": "./dist/field/index.d.ts"
+      "require": "./dist/json-twdc-field.cjs.js"
     },
-    "./modifier": {
-      "import": "./dist/json-twdc-modifier.es.js",
-      "require": "./dist/json-twdc-modifier.cjs.js",
-      "types": "./dist/modifier/index.d.ts"
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/json-twdc-schema.es.js",
+      "require": "./dist/json-twdc-schema.cjs.js"
     }
   },
   "files": [

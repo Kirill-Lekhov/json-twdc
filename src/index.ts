@@ -1,6 +1,3 @@
 export * from "./field"
-export * from "./modifier"
-export type { default as ISerializer } from "./ISerializer"
-export { default as InterfaceSerializer } from "./InterfaceSerializer"
-export { default as ObjectSerializer } from "./ObjectSerializer"
-export { default as RecordSerializer } from "./RecordSerializer"
+export * from "./schema"
+export * from "./serializer"

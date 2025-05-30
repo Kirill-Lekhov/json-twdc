@@ -1,32 +1,19 @@
-import SerializerField from "./SerializerField"
-import type ISerializer from "../ISerializer"
+import BaseField from "./BaseField"
+import type ISerializer from "../serializer/ISerializer"
+import type _IOptions from "./IOptions"
 
 
-export default function ObjectField<T>(serializer: ISerializer<T>, nullable: true): _ObjectField<T, true>
-export default function ObjectField<T>(serializer: ISerializer<T>, nullable?: false): _ObjectField<T, false>
-export default function ObjectField<T>(
-	serializer: ISerializer<T>, nullable: boolean = false,
-): _ObjectField<T, true> | _ObjectField<T, false> {
-	const field = new _ObjectField(serializer, nullable)
-
-	if (nullable) {
-		return field as _ObjectField<T, true>
-	} else {
-		return field as _ObjectField<T, false>
-	}
+export interface IOptions<T extends object> extends _IOptions {
+	serializer: ISerializer<T>
 }
 
 
-class _ObjectField<T, Nullable extends boolean> extends SerializerField<T, Nullable> {
-	public serializer: ISerializer<T>
-
-	constructor(serializer: ISerializer<T>, nullable = false) {
-		super(nullable)
-
-		this.serializer = serializer
+export default class ObjectField<T extends object> extends BaseField<T, IOptions<T>> {
+	_serialize(value: T): any {
+		return this.options.serializer.serialize(value)
 	}
 
-	protected _deserialize(value: any): T {
-		return this.serializer.deserialize(value)
+	_deserialize(raw: any): T {
+		return this.options.serializer.deserialize(raw)
 	}
 }

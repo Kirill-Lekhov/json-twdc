@@ -1,25 +1,16 @@
-import SerializerField from "./SerializerField"
+import BaseField from "./BaseField"
 
 
-export default function NumberField(nullable: true): _NumberField<true>
-export default function NumberField(nullable?: false): _NumberField<false>
-export default function NumberField(nullable: boolean = false): _NumberField<true> | _NumberField<false> {
-	const field = new _NumberField(nullable)
-
-	if (nullable) {
-		return field as _NumberField<true>
-	} else {
-		return field as _NumberField<false>
+export default class NumberField extends BaseField<number> {
+	_serialize(value: number): any {
+		return value
 	}
-}
 
-
-class _NumberField<Nullable extends boolean> extends SerializerField<number, Nullable> {
-	protected _deserialize(value: any): number {
-		if (typeof value !== "number") {
-			throw new Error(`${this.constructor.name}: Unexpected type of value ${value}`)
+	_deserialize(raw: any): number {
+		if (typeof raw !== "number") {
+			throw new Error(`${this.constructor.name}: Value must be of number type`)
 		}
 
-		return value
+		return raw
 	}
 }

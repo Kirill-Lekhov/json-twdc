@@ -1,17 +1,22 @@
-import type ISerializer from "./ISerializer"
-import type { SerializerField } from "./field"
+import BaseSerializer from "./BaseSerializer"
+import type { BaseField } from "../field"
 
 
 type AnyRecord = Record<string | number | symbol, any>
 
 
-export default abstract class RecordSerializer<T extends AnyRecord> implements ISerializer<T> {
-	public abstract readonly keysSerializer: SerializerField<keyof T>
-	public abstract readonly valuesSerializer: SerializerField<T[keyof T]>
+export default abstract class RecordSerializer<T extends AnyRecord> extends BaseSerializer<T> {
+	public abstract readonly keysSerializer: BaseField<keyof T>
+	public abstract readonly valuesSerializer: BaseField<T[keyof T]>
 
-	// @ts-expect-error
-	serialize(obj: T): object | never {
-		throw new Error("Serialization is not implemented")
+	serialize(value: T): any {
+		const result: any = {}
+
+		Object.entries(value).forEach(([key, value]) => {
+			result[this.keysSerializer.serialize(key)] = this.valuesSerializer.serialize(value)
+		})
+
+		return result
 	}
 
 	deserialize(raw: any): T {

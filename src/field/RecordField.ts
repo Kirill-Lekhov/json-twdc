@@ -1,39 +1,22 @@
-import SerializerField from "./SerializerField"
-import type ISerializer from "../ISerializer"
+import type ISerializer from "../serializer/ISerializer"
+import BaseField from "./BaseField"
+import type _IOptions from "./IOptions"
 
 
 type AnyRecord = Record<string | number | symbol, any>
 
 
-export default function RecordField<T extends AnyRecord>(
-	serializer: ISerializer<T>, nullable: true,
-): _RecordField<T, true>
-export default function RecordField<T extends AnyRecord>(
-	serializer: ISerializer<T>, nullable?: false,
-): _RecordField<T, false>
-export default function RecordField<T extends AnyRecord>(
-	serializer: ISerializer<T>, nullable: boolean = false,
-): _RecordField<T, true> | _RecordField<T, false> {
-	const field = new _RecordField(serializer, nullable)
-
-	if (nullable) {
-		return field as _RecordField<T, true>
-	} else {
-		return field as _RecordField<T, false>
-	}
+export interface IOptions<T extends AnyRecord> extends _IOptions {
+	serializer: ISerializer<T>
 }
 
 
-class _RecordField<T extends AnyRecord, Nullable extends boolean> extends SerializerField<T, Nullable> {
-	public serializer: ISerializer<T>
-
-	constructor(serializer: ISerializer<T>, nullable = false) {
-		super(nullable)
-
-		this.serializer = serializer
+export default class RecordField<T extends AnyRecord> extends BaseField<T, IOptions<T>> {
+	_serialize(value: T): any {
+		return this.options.serializer.serialize(value)
 	}
 
-	protected _deserialize(value: any): T {
-		return this.serializer.deserialize(value)
+	_deserialize(raw: any): T {
+		return this.options.serializer.deserialize(raw)
 	}
 }

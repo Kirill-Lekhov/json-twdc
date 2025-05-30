@@ -10,7 +10,7 @@ export default defineConfig({
 			entry: {
 				"json-twdc": resolve(__dirname, "src/index.ts"),
 				"json-twdc/field": resolve(__dirname, "src/field/index.ts"),
-				"json-twdc/modifier": resolve(__dirname, "src/modifier/index.ts"),
+				"json-twdc/schema": resolve(__dirname, "src/schema/index.ts"),
 			},
 			fileName: (format, entryName) => `json-twdc-${entryName}.${format}.js`,
 		},
@@ -18,9 +18,9 @@ export default defineConfig({
 			input: {
 				main: resolve(__dirname, "src/index.ts"),
 				field: resolve(__dirname, "src/field/index.ts"),
-				modifier: resolve(__dirname, "src/modifier/index.ts"),
+				schema: resolve(__dirname, "src/schema/index.ts"),
 			},
 		},
 	},
-	plugins: [dts()],
+	plugins: [dts({ exclude: "**/*.test.ts" })],
 })

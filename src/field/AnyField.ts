@@ -1,17 +1,12 @@
-import SerializerField from "./SerializerField"
+import BaseField from "./BaseField"
 
 
-export default function AnyField(): _AnyField {
-	return new _AnyField()
-}
-
-
-class _AnyField extends SerializerField<any, true> {
-	constructor() {
-		super(true)
+export default class AnyField extends BaseField<any> {
+	_serialize(value: any) {
+		return value
 	}
 
-	protected _deserialize(value: any): any {
-		return value
+	_deserialize(raw: any) {
+		return raw
 	}
 }

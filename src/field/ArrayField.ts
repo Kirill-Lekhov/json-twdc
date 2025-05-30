@@ -1,34 +1,29 @@
-import SerializerField from "./SerializerField"
+import type ISerializer from "../serializer/ISerializer"
+import BaseField from "./BaseField"
+import type _IOptions from "./IOptions"
 
 
-export default function ArrayField<T>(child: SerializerField<T>, nullable: true): _ArrayField<T, true>
-export default function ArrayField<T>(child: SerializerField<T>, nullable?: false): _ArrayField<T, false>
-export default function ArrayField<T>(
-	child: SerializerField<T>, nullable: boolean = false,
-): _ArrayField<T, true> | _ArrayField<T, false> {
-	const field = new _ArrayField(child, nullable)
-
-	if (nullable) {
-		return field as _ArrayField<T, true>
-	} else {
-		return field as _ArrayField<T, false>
-	}
+export interface IOptions<T> extends _IOptions {
+	serializer: ISerializer<T>
 }
 
 
-class _ArrayField<T, Nullable extends boolean> extends SerializerField<T[], Nullable> {
-	public child: SerializerField<T>
+export default class ArrayField<T> extends BaseField<T[], IOptions<T>> {
+	_serialize(value: T[]): any {
+		const result = []
 
-	constructor(child: SerializerField<T>, nullable = false) {
-		super(nullable)
-		this.child = child
-	}
-
-	protected _deserialize(value: any): T[] {
-		if (!Array.isArray(value)) {
-			throw new Error(`${this.constructor.name}: Unexpected type of value ${value}`)
+		for (const item of value) {
+			result.push(this.options.serializer.serialize(item))
 		}
 
-		return value.map((e: unknown) => this.child.deserialize(e))
+		return value
+	}
+
+	_deserialize(raw: any): T[] {
+		if (!Array.isArray(raw)) {
+			throw new Error(`${this.constructor.name}: Unexpected type of value ${raw}`)
+		}
+
+		return raw.map((e: any) => this.options.serializer.deserialize(e))
 	}
 }

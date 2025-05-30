@@ -1,37 +1,25 @@
-import SerializerField from "./SerializerField"
+import BaseField from "./BaseField"
+import type _IOptions from "./IOptions"
 import { getKeyByValue } from "../generic/enumeration"
 
 
-export default function EnumField<T extends object>(enumeration: T, nullable: true): _EnumField<T, true>
-export default function EnumField<T extends object>(enumeration: T, nullable?: false): _EnumField<T, false>
-export default function EnumField<T extends object>(
-	enumeration: T, nullable: boolean = false,
-): _EnumField<T, true> | _EnumField<T, false> {
-	const field = new _EnumField(enumeration, nullable)
-
-	if (nullable) {
-		return field as _EnumField<T, true>
-	} else {
-		return field as _EnumField<T, false>
-	}
+export interface IOptions<T extends object> extends _IOptions {
+	enumeration: T
 }
 
 
-class _EnumField<T extends object, Nullable extends boolean> extends SerializerField<T[keyof T], Nullable> {
-	public enumeration: T
-
-	constructor(enumeration: T, nullable = false) {
-		super(nullable)
-		this.enumeration = enumeration
+export default class EnumField<T extends object> extends BaseField<T[keyof T], IOptions<T>> {
+	_serialize(value: T[keyof T]): any {
+		return value
 	}
 
-	protected _deserialize(value: any): T[keyof T] {
-		let enumKey = getKeyByValue(this.enumeration, value)
+	_deserialize(raw: any): T[keyof T] {
+		let enumKey = getKeyByValue(this.options.enumeration, raw)
 
-		if (enumKey === null || typeof this.enumeration[enumKey] === "function") {
-			throw new Error(`${this.constructor.name}: Unexpected enum value ${value}`)
+		if (enumKey === null || typeof this.options.enumeration[enumKey] === "function") {
+			throw new Error(`${this.constructor.name}: Unexpected enum value ${raw}`)
 		}
 
-		return this.enumeration[enumKey] as T[keyof T]
+		return this.options.enumeration[enumKey]
 	}
 }
