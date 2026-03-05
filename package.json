@@ -52,8 +52,5 @@
       "import": "./dist/json-twdc-schema.es.js",
       "require": "./dist/json-twdc-schema.cjs.js"
     }
-  },
-  "files": [
-    "dist"
-  ]
+  }
 }
