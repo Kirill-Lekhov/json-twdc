@@ -74,6 +74,7 @@ export default abstract class ObjectSerializer<T extends new (...args: any) => I
 			const expectedAttrName = field.options.alias ?? attrName
 
 			if (field.options.optional && raw[expectedAttrName] === undefined) {
+				constructorArgs.push(undefined)
 				continue
 			}
 
