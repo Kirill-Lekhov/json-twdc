@@ -10,6 +10,7 @@ import ObjectField from "./ObjectField"
 import RecordField from "./RecordField"
 import SetField from "./SetField"
 import StringField from "./StringField"
+import LiteralField from "./LiteralField"
 import { Nullable } from "./modifier"
 
 
@@ -22,6 +23,7 @@ export {
 	NumberField,
 	StringField,
 	DateField,
+	LiteralField,
 
 	ArrayField,
 	EnumField,

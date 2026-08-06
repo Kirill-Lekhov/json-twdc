@@ -117,6 +117,16 @@ let field = new StringField({})
 field = Field({ type: "string" })
 ```
 
+#### LiteralField
+Field that will additionally check the passed value with the reference value and, in case of a mismatch, throw an error.
+
+```typescript
+import { LiteralField } from "json-twdc/field"
+
+
+let field = new LiteralField({ value: true })		// Also can use strings, numbers and null
+```
+
 ### Complex fields
 Complex fields are fields that require specifying child serializers and usually work with one complex types, like objects.
 
